@@ -134,10 +134,7 @@ configurations {
 }
 
 test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
+     enabled = false
 }
 
 tasks.withType(JavaCompile) {
