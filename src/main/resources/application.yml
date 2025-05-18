@@ -1,0 +1,49 @@
+smpp:
+  enabled: false  # Desactiva SMPP en desarrollo
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/orderservice
+      database: orderservice  
+
+  security:
+    user:
+      name: user
+      password: password
+      roles: USER
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+    
+server:
+  port: 989
+
+application:
+    name: order-service
+
+grpc:
+  server:
+    port: 9090
+    enabled: true
+    address: 0.0.0.0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  observation:
+    http:
+      server:
+        requests: true
+
+akka:
+  loglevel: INFO
+  actor:
+    debug:
+      lifecycle: off
+      receive: off

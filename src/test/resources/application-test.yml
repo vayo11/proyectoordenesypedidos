@@ -1,0 +1,15 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/testdb
+      database: testdb
+
+grpc:
+  server:
+    port: 0  # Puerto aleatorio para pruebas
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

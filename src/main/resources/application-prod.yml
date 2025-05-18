@@ -1,0 +1,47 @@
+server:
+  port: 989
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/orderdb
+      database: orderdb
+  application:
+    name: order-service
+  integration:
+    smpp:
+      host: smpp.twilio.com
+      port: 2775
+      systemId: ${TWILIO_ACCOUNT_SID}
+      password: ${TWILIO_AUTH_TOKEN}
+      systemType: twilio
+      sourceAddr: +15005550006
+      bindType: TRANSCEIVER
+smpp:
+  enabled: true
+grpc:
+  server:
+    port: 9090
+    enabled: true
+    address: 0.0.0.0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  observation:
+    http:
+      server:
+        requests: true
+
+akka:
+  loglevel: INFO
+  actor:
+    debug:
+      lifecycle: off
+      receive: off
