@@ -15,24 +15,29 @@ import com.mongodb.client.MongoClients;
 @TestConfiguration
 @Profile("test")
 public class TestMongoConfig {
-    
-    @Bean
-    public MongoTemplate mongoTemplate() throws Exception {
-        return new MongoTemplate(mongoClient(), "testdb");
-    }
-    
-    @Bean(destroyMethod = "close")
-    public MongoClient mongoClient() throws Exception {
-        // Configura MongoDB embebido en el puerto 27017
+
+    private MongodExecutable mongodExecutable;
+
+    @Bean(destroyMethod = "stop")
+    public MongodExecutable mongodExecutable() throws Exception {
         MongodStarter starter = MongodStarter.getDefaultInstance();
         MongodConfig config = MongodConfig.builder()
             .version(Version.Main.PRODUCTION)
             .net(new Net("localhost", 27017, false))
             .build();
-        
-        MongodExecutable executable = starter.prepare(config);
-        executable.start();
-        
+
+        mongodExecutable = starter.prepare(config);
+        mongodExecutable.start();
+        return mongodExecutable;
+    }
+
+    @Bean
+    public MongoClient mongoClient() {
         return MongoClients.create("mongodb://localhost:27017");
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate(MongoClient mongoClient) {
+        return new MongoTemplate(mongoClient, "testdb");
     }
 }
