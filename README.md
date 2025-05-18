@@ -50,4 +50,57 @@ Este microservicio permite registrar y procesar órdenes mediante una API gRPC, 
 ├──build.gradle (Archivo de dependencias)
 
 #  Ejecucion 
-Clonar el proyecto de github
+Clonar el proyecto de github 
+Ejecutar : git clone https://github.com/vayo11/proyectoordenesypedidos.git
+Ejecuto en la terminar : cd proyectoordenesypedidos
+Cargar dependencias : ./gradlew clean build --refresh-dependencies (En cuenta que no se ejecuto el proto el error no es ningun problema)
+Ejecutar el Proto : ./gradlew generateProto (Genera los request y reponse base para los archivos de inyeccion por eso el error anterior)
+Ejecuto la compilacion : ./gradlew build
+Levanto la Api: ./gradlew bootRun
+
+#  Insersion:
+Probamos el grpc para esto instalamos BloomRPC https://github.com/bloomrpc/bloomrpc/releases
+importamos el archivo proto de la ubiacion ya mencionada anterioemente
+colocamos la ruta : localhost:9090
+configuramos el json: 
+{
+  "order_id": "1234",
+  "customer_id": "039c7d80-318f-496c-ac21-9dc881fb5725",
+  "phone": "555-1234",
+  "items": [
+    {
+      "name": "Hello",
+      "quantity": 10
+    },
+    {
+      "name": "World",
+      "quantity": 5
+    }
+  ]
+}
+
+Ejecutamos y ejecuta la grpc , el actor , envia el sms (Nota: Solo para produccion si se tiene cliente configurado)y guarda en mongodb
+
+#  Consulta:
+Se dispone de 2 empoints
+Instalar postman: https://www.postman.com/downloads/
+http://localhost:989/api/orders/id  (El id debe ser replazado por el id que se inserto segun el ejemplo 1234) deberia quedar asi
+http://localhost:989/api/orders/1234 
+Respuesta : 
+{
+  "id": {
+    "timestamp": 1747556535,
+    "date": 1747556535000
+  },
+  "orderId": "123",
+  "customerId": "039c7d80-318f-496c-ac21-9dc881fb5725",
+  "customerPhoneNumber": "555-1234",
+  "status": "COMPLETED",
+  "items": [
+    "Hello (x10)",
+    "World (x5)"
+  ],
+  "ts": 1747556535.151
+}
+
+El empoint de consulta por fecha lo puedes consultar asi  http://localhost:989/api/orders/by-date?startDate=2024-05-01T00:00:00Z&endDate=2024-05-31T23:59:59Z
